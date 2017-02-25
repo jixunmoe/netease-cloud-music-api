@@ -1,0 +1,4 @@
+Flask==0.12
+pycrypto==2.6.1
+requests==2.13.0
+PyYAML==3.12

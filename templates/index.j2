@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>网易云音乐解析</title>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" />
+  <link rel="stylesheet" href="/s/app.css" />
+</head>
+<body class="nojs" data-sitekey="{{ config.recaptcha.sitekey }}" data-verified="{{ 1 if verified else 0 }}">
+  <div class="container" id="app">
+    <h1>网易云音乐 - 直链生成器</h1>
+    <p>制作: <a href="https://jixun.moe/">Jixun</a></p>
+
+    <form method="POST" action="/sign" id="sign">
+      <div class="form-group">
+        <label for="sign-url">音乐地址或 ID</label>
+        <input required class="form-control" id="sign-url" placeholder="http://music.163.com/#/song?id=32507038" v-model="src_url">
+      </div>
+
+      <div class="form-group">
+        <label for="sign-rate">音质</label>
+        <select class="form-control" v-model="rate" id="sign-rate">
+          <option value="128000">普通 (128 kbps) - 音质最低 - 文件最小</option>
+          <option value="192000">较高 (192 kbps) - 各项均衡</option>
+          <option value="320000">极高 (320 kbps) - 音质最高 - 文件最大</option>
+        </select>
+      </div>
+
+      <div class="form-group nojs-hide js-hide vue-show-block" v-bind:class="{ hide: !error }">
+        <div class="alert alert-danger"><b>错误: </b><span v-text="error">{{ error }}</span></div>
+      </div>
+
+      <div v-bind:class="{ hide: verified }">
+        <div class="form-group">
+          <label>验证码</label>
+          <div id="recaptcha"></div>
+          <div class="js-hide alert alert-info">请开启 JavaScript 并允许 reCAPTCHA 加载。</div>
+        </div>
+      </div>
+
+      <div v-bind:class="{ hide: !url }">
+        <div class="form-group nojs-hide js-hide vue-show-block">
+          <label for="generated-url">生成的地址</label>
+          <input readonly id="generated-url" class="form-control" v-model="url">
+        </div>
+
+        <div class="form-group nojs-hide js-hide vue-show-block">
+          <label>歌曲信息</label>
+          <table class="table">
+            <tr>
+              <th class="col-xs-1">歌名</th>
+              <td><a v-bind:href="'http://music.163.com/#/song?id=' + song.id" v-text="song.name"></a></td>
+            </tr>
+
+            <tr>
+              <th>歌手</th>
+              <td>
+                <ul class="list-inline artists">
+                  <li v-for="a in song.artist">
+                    <a v-if="a.id" v-bind:href="'http://music.163.com/album?id=' + a.id" v-text="a.name"></a>
+                    <span v-if="!a.id" v-text="a.name"></span>
+                  </li>
+                </ul>
+              </td>
+            </tr>
+          </table>
+        </div>
+
+        <div class="form-group nojs-hide js-hide vue-show-block">
+          <label>歌曲试听</label>
+          <audio v-bind:src="url" id="preview" controls>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <button type="submit" class="btn btn-primary" v-on:click="sign">获取</button>
+      </div>
+    </form>
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.1.10/vue.min.js"></script>
+  <script src="/s/app.js"></script>
+  {% if not verified %}
+    <script src='https://www.google.com/recaptcha/api.js?onload=loadCaptcha&render=explicit' async defer></script>
+  {% endif %}
+</body>
+</html>

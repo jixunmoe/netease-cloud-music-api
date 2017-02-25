@@ -1,0 +1,18 @@
+# Custom sign key
+sign_salt: salt
+
+# Netease Cloud Music API Key
+encrypt:
+  e: >-
+    e
+  
+  n: >-
+    n
+  
+  nonce: >-
+    nonce
+
+# Google reCAPTCHA key
+recaptcha:
+  secret:  secret
+  sitekey: sitekey

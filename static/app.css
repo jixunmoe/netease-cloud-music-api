@@ -1,0 +1,24 @@
+body {
+	font-family: "Helvetica Neue", Helvetica, 'Microsoft YaHei UI', Arial, sans-serif;
+}
+
+/* 隐藏 */
+.hide,
+
+/* 无 js 时隐藏 */
+.nojs .nojs-hide,
+
+/* 有 js 时隐藏 */
+.js .js-hide {
+	display: none;
+}
+
+.js .js-show-block,
+.nojs .nojs-show-block,
+.vue .vue-show-block {
+	display: block;
+}
+
+#preview {
+	width: 100%;
+}
