@@ -13,12 +13,27 @@ body {
 	display: none;
 }
 
+/* 显示 */
+.show-block,
+
+/* 有 js 时显示 */
 .js .js-show-block,
+
+/* 无 js 时显示 */
 .nojs .nojs-show-block,
+
+/* 有 vue 时显示 */
 .vue .vue-show-block {
 	display: block;
 }
 
+/* 音乐预览播放器 */
 #preview {
 	width: 100%;
+}
+
+/* 多艺术家时的分割线 */
+ul.artists li:not(:first-child)::before {
+	content: '/';
+	padding-right: 10px;
 }
