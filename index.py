@@ -21,8 +21,8 @@ for k, v in encrypt.iteritems():
 
 app = Flask(__name__, static_url_path='/static')
 app.config['recaptcha'] = config['recaptcha']
-#app.debug = True
-app.session_interface = RedisSessionInterface()
+app.debug = config['debug']
+app.session_interface = RedisSessionInterface(config['redis'])
 
 # 生成随机 AES 用密钥
 def createSecretKey(size):

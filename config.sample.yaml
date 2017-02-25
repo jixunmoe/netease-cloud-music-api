@@ -1,6 +1,13 @@
 # Custom sign key
 sign_salt: salt
 
+debug: false
+
+redis:
+  host: localhost
+  port: 6379
+  db:   0
+
 # Netease Cloud Music API Key
 encrypt:
   e: >-

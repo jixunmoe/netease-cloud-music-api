@@ -24,9 +24,7 @@ class RedisSessionInterface(SessionInterface):
   session_class = RedisSession
 
   def __init__(self, redis=None, prefix='session:'):
-    if redis is None:
-      redis = Redis(host='localhost', port=6379, db=2)
-    self.redis = redis
+    self.redis = Redis(host=redis['host'], port=redis['port'], db=redis['db'])
     self.prefix = prefix
 
   def generate_sid(self):
