@@ -2,13 +2,14 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>网易云音乐解析</title>
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" />
   <link rel="stylesheet" href="/s/app.css" />
 </head>
 <body class="nojs" data-sitekey="{{ config.recaptcha.sitekey }}" data-verified="{{ 1 if verified else 0 }}">
   <div class="container" id="app">
-    <h1>网易云音乐 - 直链生成器</h1>
+    <h1>云音乐直链生成器</h1>
     <p>制作: <a href="https://jixun.moe/">Jixun</a></p>
 
     <form method="POST" action="/sign" id="sign">
@@ -41,14 +42,14 @@
       <div v-bind:class="{ hide: !url }">
         <div class="form-group nojs-hide js-hide vue-show-block">
           <label for="generated-url">生成的地址</label>
-          <input readonly id="generated-url" class="form-control" v-model="url">
+          <input readonly id="generated-url" class="form-control" v-model="url" v-on:click="sel">
         </div>
 
-        <div class="form-group nojs-hide js-hide vue-show-block">
+        <div class="form-group nojs-hide js-hide vue-show-block no-margin-bottom">
           <label>歌曲信息</label>
-          <table class="table">
+          <table class="table no-margin-bottom">
             <tr>
-              <th class="col-xs-1">歌名</th>
+              <th class="col-xs-2 col-s-1">歌名</th>
               <td><a v-bind:href="'http://music.163.com/#/song?id=' + song.id" v-text="song.name"></a></td>
             </tr>
 
@@ -74,12 +75,14 @@
 
       <div class="form-group">
         <button type="submit" class="btn btn-primary" v-on:click="sign">获取</button>
+        <button id="copy" class="btn btn-default" v-bind:class="{ hide: !url }" data-clipboard-target="#generated-url">复制连接</button>
       </div>
     </form>
   </div>
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.1.10/vue.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/1.5.16/clipboard.js"></script>
   <script src="/s/app.js"></script>
   {% if not verified %}
     <script src='https://www.google.com/recaptcha/api.js?onload=loadCaptcha&render=explicit' async defer></script>

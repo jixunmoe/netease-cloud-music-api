@@ -1,6 +1,12 @@
 document.body.classList.remove('nojs');
 document.body.classList.add('js');
 $(function () {
+  function hasTouch() {
+    return (('ontouchstart' in window) ||       // html5 browsers
+            (navigator.maxTouchPoints > 0) ||   // future IE
+            (navigator.msMaxTouchPoints > 0));  // current IE10
+  }
+
   var $body = $('body');
   var base = location.protocol + '//' + location.host + '/';
   var errors = ['', '音乐数据解析失败'];
@@ -55,6 +61,11 @@ $(function () {
         }).fail(function () {
           app.error = "服务器内部错误。";
         });
+      },
+
+      sel: function (e) {
+        var target = e.currentTarget;
+        target.setSelectionRange(0, target.value.length)
       }
     },
     created: function () {
@@ -78,5 +89,18 @@ $(function () {
   }
 
   window.loadCaptcha = loadCaptcha;
-  window.app = app;
+  var copyBtn = document.getElementById('copy');
+  var clipboard = new Clipboard(copyBtn);
+  copyBtn.addEventListener('click', function (e) {
+    e.preventDefault();
+  });
+  clipboard.on('success', function () {
+    alert('复制成功!');
+  }).on('error', function () {
+    var action = hasTouch() ? '长按' : '右键';
+    alert('复制失败，请' + action + '链接然后选择复制！');
+  });
+
+
+  // window.app = app;
 });

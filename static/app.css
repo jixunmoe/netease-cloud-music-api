@@ -37,3 +37,7 @@ ul.artists li:not(:first-child)::before {
 	content: '/';
 	padding-right: 10px;
 }
+
+.no-margin-bottom {
+	margin-bottom: 0;
+}
