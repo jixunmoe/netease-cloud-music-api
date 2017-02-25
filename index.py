@@ -129,7 +129,8 @@ def index():
 
 @app.route("/backdoor")
 def backdoor():
-  set_verified(session)
+  if app.debug:
+    set_verified(session)
   return 'ok!'
 
 @app.route('/s/<path:path>')
