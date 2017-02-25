@@ -51,6 +51,7 @@ $(function () {
 
           app.url = base + param + '/' + response.sign;
           app.song = response.song;
+          app.error = '';
         }).fail(function () {
           app.error = "服务器内部错误。";
         });
