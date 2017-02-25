@@ -49,7 +49,7 @@ def encrypted_request(text):
   }
   return data
 
-nonce   = '0CoJUm6Qyw8W8jud'
+nonce = config['nonce']
 n, e = int(encrypt["n"], 16), int(encrypt["e"], 16)
 
 def req_netease(url, payload):
