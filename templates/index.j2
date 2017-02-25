@@ -57,7 +57,7 @@
               <td>
                 <ul class="list-inline artists">
                   <li v-for="a in song.artist">
-                    <a v-if="a.id" v-bind:href="'http://music.163.com/album?id=' + a.id" v-text="a.name"></a>
+                    <a v-if="a.id" v-bind:href="'http://music.163.com/#/artist?id=' + a.id" v-text="a.name"></a>
                     <span v-if="!a.id" v-text="a.name"></span>
                   </li>
                 </ul>
