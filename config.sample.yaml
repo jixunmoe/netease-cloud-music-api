@@ -8,6 +8,13 @@ redis:
   port: 6379
   db:   0
 
+# The real ip header passed by reverse proxy (Apache, Nginx etc.)
+# None:       null
+# Apache:     X-Forwarded-For
+# Nginx:      X-Real-IP
+# CloudFlare: CF-Connecting-IP
+ip_header: null
+
 # Netease Cloud Music API Key
 encrypt:
   e: >-

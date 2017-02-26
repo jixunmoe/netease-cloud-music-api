@@ -65,7 +65,7 @@ $(function () {
 
       sel: function (e) {
         var target = e.currentTarget;
-        target.setSelectionRange(0, target.value.length)
+        target.setSelectionRange(0, target.value.length);
       }
     },
     created: function () {
@@ -76,11 +76,16 @@ $(function () {
     }
   });
 
+  var captchaId = null;
   function loadCaptcha () {
     if (window.grecaptcha) {
-      grecaptcha.render('recaptcha', {
-        'sitekey': $body.data('sitekey')
-      });
+      if (captchaId !== null) {
+        grecaptcha.reset(captchaId);
+      } else {
+        captchaId = grecaptcha.render('recaptcha', {
+          'sitekey': $body.data('sitekey')
+        });
+      }
     } else {
       var script = document.createElement('script');
       script.src = 'https://www.google.com/recaptcha/api.js?onload=loadCaptcha&render=explicit';

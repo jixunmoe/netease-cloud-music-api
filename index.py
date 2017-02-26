@@ -49,7 +49,7 @@ def encrypted_request(text):
   }
   return data
 
-nonce = config['nonce']
+nonce = encrypt['nonce']
 n, e = int(encrypt["n"], 16), int(encrypt["e"], 16)
 
 def req_netease(url, payload):
@@ -86,10 +86,8 @@ def req_recaptcha(response, remote_ip):
     'remoteip': remote_ip
   });
   result = json.loads(r.text);
-  print(r.text)
+  print("req_recaptcha from %s, result: %s" % (remote_ip, r.text))
   return result['success']
-
-
 
 
 
@@ -142,7 +140,10 @@ def generate_sign(songId, rate):
   if not is_verified(session):
     # 首先检查谷歌验证
     if 'g-recaptcha-response' not in request.form \
-      or not req_recaptcha(request.form['g-recaptcha-response'], request.remote_addr):
+      or not req_recaptcha(
+        request.form['g-recaptcha-response'],
+        request.headers[config['ip_header']] if config['ip_header'] else request.remote_addr
+      ):
       #
       return jsonify({"verified": is_verified(session)})
 

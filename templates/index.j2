@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>网易云音乐解析</title>
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" />
-  <link rel="stylesheet" href="/s/app.css" />
+  <link rel="stylesheet" href="/s/app.min.css" />
 </head>
 <body class="nojs" data-sitekey="{{ config.recaptcha.sitekey }}" data-verified="{{ 1 if verified else 0 }}">
   <div class="container" id="app">
@@ -83,9 +83,6 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.1.10/vue.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/1.5.16/clipboard.js"></script>
-  <script src="/s/app.js"></script>
-  {% if not verified %}
-    <script src='https://www.google.com/recaptcha/api.js?onload=loadCaptcha&render=explicit' async defer></script>
-  {% endif %}
+  <script src="/s/app.min.js"></script>
 </body>
 </html>
