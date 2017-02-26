@@ -16,7 +16,6 @@ class RedisSession(CallbackDict, SessionMixin):
     self.modified = False
 
 def total_seconds(td):
-    print(td.days * 60 * 60 * 24 + td.seconds)
     return td.days * 60 * 60 * 24 + td.seconds
 
 class RedisSessionInterface(SessionInterface):
