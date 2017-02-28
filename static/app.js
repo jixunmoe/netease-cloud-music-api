@@ -31,7 +31,9 @@ $(function () {
         var data = $('#sign', app.$el).serialize();
         var songId = app.src_url;
         if (!/^\d+$/.test(songId)) {
-          var m = songId.match(/song\?id=(\d+)/);
+          // xxx/song/12345
+          // xxx/song?id=12345
+          var m = songId.match(/song(?:\?id=|\/)(\d+)/);
           if (m && m.length > 0) {
             songId = m[1];
           } else {
