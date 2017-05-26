@@ -77,6 +77,7 @@ def req_netease_url(songId, rate):
   song = data['data'][0]
   if song['code'] != 200 or song['url'] is None:
     return None
+  song['url'] = song['url'].replace('http:', '')
   return song
 
 def req_recaptcha(response, remote_ip):
@@ -145,7 +146,7 @@ def generate_sign(songId, rate):
         request.headers[config['ip_header']] if config['ip_header'] else request.remote_addr
       ):
       #
-      return jsonify({"verified": is_verified(session)})
+      return jsonify({"verified": is_verified(session), "errno": 2})
 
     set_verified(session)
 

@@ -1,4 +1,5 @@
 Flask==0.12
-pycrypto==2.6.1
+pycryptodome==3.4.5
 requests==2.13.0
 PyYAML==3.12
+redis==2.10.5
