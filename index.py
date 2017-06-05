@@ -113,13 +113,17 @@ def sign_request(songId, rate):
   return h.hexdigest()
 
 def is_verified(session):
+  if not config['recaptcha']:
+    return True
   return 'verified' in session and session['verified'] > 0
 
 def set_verified(session):
-  session['verified'] = randint(10, 20)
+  if config['recaptcha']:
+    session['verified'] = randint(10, 20)
 
 def decrease_verified(session):
-  session['verified'] -= 1;
+  if config['recaptcha']:
+    session['verified'] -= 1;
 
 @app.route("/")
 def index():
