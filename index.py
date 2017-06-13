@@ -77,7 +77,7 @@ def req_netease_url(songId, rate):
   song = data['data'][0]
   if song['code'] != 200 or song['url'] is None:
     return None
-  song['url'] = song['url'].replace('http:', '')
+  # song['url'] = song['url'].replace('http:', '')
   return song
 
 def req_recaptcha(response, remote_ip):
