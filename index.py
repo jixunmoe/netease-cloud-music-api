@@ -102,7 +102,7 @@ headers = {
   'Accept-Language': 'q=0.8,zh-CN;q=0.6,zh;q=0.2',
   'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/56.0.2924.87 Safari/537.36',
   'Referer': 'http://music.163.com/',
-  'Cookie': 'os=uwp;'
+  # 'Cookie': 'os=uwp;'
 }
 
 def sign_request(songId, rate):
