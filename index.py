@@ -8,7 +8,7 @@ from Crypto.PublicKey import RSA
 from Crypto.Hash import SHA256
 from random import randint
 
-import base64, os, json
+import binascii, os, json
 import yaml, requests
 
 from redis_session import RedisSessionInterface
@@ -16,36 +16,25 @@ from redis_session import RedisSessionInterface
 # Load and parse config file
 config = yaml.load(file('config.yaml', 'r'))
 encrypt = config['encrypt']
-for k, v in encrypt.iteritems():
-  encrypt[k] = v.replace(" ", '')
 
 app = Flask(__name__, static_url_path='/static')
 app.config['recaptcha'] = config['recaptcha']
 app.debug = config['debug']
 app.session_interface = RedisSessionInterface(config['redis'])
 
-# 生成随机 AES 用密钥
-def createSecretKey(size):
-  return (''.join(map(lambda xx: (hex(ord(xx))[2:]), os.urandom(size))))[0:16]
-
 def aesEncrypt(text, secKey):
   pad = 16 - len(text) % 16
   text = text + pad * chr(pad)
-  encryptor = AES.new(secKey, 2, '0102030405060708')
-  ciphertext = encryptor.encrypt(text)
-  ciphertext = base64.b64encode(ciphertext)
-  return ciphertext
+  encryptor = AES.new(secKey, 1)
+  cipherText = encryptor.encrypt(text)
+  cipherText = binascii.b2a_hex(cipherText).upper()
+  return cipherText
 
-def rsaEncrypt(text):
-  text = text[::-1]
-  rs = pow(int(text.encode('hex'), 16), e, n)
-  return format(rs, 'x').zfill(256)
-
-def encrypted_request(text):
-  encText = aesEncrypt(aesEncrypt(text, nonce), secretKey)
+def encrypted_request(jsonDict):
+  jsonStr = json.dumps(jsonDict, separators = (",", ":"))
+  encText = aesEncrypt(jsonStr, secretKey)
   data = {
-    'params': encText,
-    'encSecKey': encSecKey
+    'eparams': encText,
   }
   return data
 
@@ -54,23 +43,23 @@ n, e = int(encrypt["n"], 16), int(encrypt["e"], 16)
 
 def req_netease(url, payload):
   data = encrypted_request(payload)
-  r = requests.post(url, data = data, headers=headers)
+  r = requests.post(url, data = data, headers = headers)
   result = json.loads(r.text)
   if result['code'] != 200:
     return None
   return result
 
 def req_netease_detail(songId):
-  payload = '{"id":"%d","c":"[{\\"id\\":\\"%d\\"}]"}' % (songId, songId)
-  data = req_netease('http://music.163.com/weapi/v3/song/detail?csrf_token=', payload)
+  payload = {"method": "POST", "params": {"c": "[{id:%d}]" % songId}, "url": "http://music.163.com/api/v3/song/detail"}
+  data = req_netease('http://music.163.com/api/linux/forward', payload)
   if data is None or data['songs'] is None or len(data['songs']) != 1:
     return None
   song =  data['songs'][0]
   return song
 
 def req_netease_url(songId, rate):
-  payload = '{"ids":"[%d]","br":%d,"csrf_token":""}' % (songId, rate)
-  data = req_netease('http://music.163.com/weapi/song/enhance/player/url?csrf_token=', payload)
+  payload = {"method": "POST", "params": {"ids": [songId],"br": rate}, "url": "http://music.163.com/api/song/enhance/player/url"}
+  data = req_netease('http://music.163.com/api/linux/forward', payload)
   if data is None or data['data'] is None or len(data['data']) != 1:
     return None
   
@@ -93,16 +82,13 @@ def req_recaptcha(response, remote_ip):
 
 
 print("Generating secretKey for current session...")
-secretKey = createSecretKey(16)
-encSecKey = rsaEncrypt(secretKey)
+secretKey = binascii.a2b_hex(encrypt['secret'])
 
 headers = {
-  'Origin': 'http://music.163.com',
+  'Referer': 'http://music.163.com',
   'X-Real-IP': '118.88.88.88',
-  'Accept-Language': 'q=0.8,zh-CN;q=0.6,zh;q=0.2',
-  'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/56.0.2924.87 Safari/537.36',
-  'Referer': 'http://music.163.com/',
-  # 'Cookie': 'os=uwp;'
+  'Cookie': 'os=linux; appver=1.0.0.1026; osver=Ubuntu%2016.10',
+  'User-Agent': 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/56.0.2924.87 Safari/537.36',
 }
 
 def sign_request(songId, rate):
